@@ -1,7 +1,26 @@
 use crate::slug::slugify;
+use std::ffi::OsStr;
 use std::fs;
 use std::path::Path;
 use walkdir::WalkDir;
+
+fn safe_rename(src: &Path, dst: &Path) -> std::io::Result<()> {
+    if src.exists() && dst.exists() {
+        // Compare file names case-insensitively
+        let src_name = src.file_name().and_then(OsStr::to_str).unwrap_or("");
+        let dst_name = dst.file_name().and_then(OsStr::to_str).unwrap_or("");
+
+        if src_name.eq_ignore_ascii_case(dst_name) {
+            // Case-only rename on case-insensitive FS: do two-step rename
+            let tmp = src.with_extension("tmp_rename");
+            fs::rename(src, &tmp)?;
+            fs::rename(&tmp, dst)?;
+            return Ok(());
+        }
+    }
+
+    fs::rename(src, dst)
+}
 
 /// Recursively rename files and directories in place using slugify rules
 pub fn process_dir(path: &Path, lowercase: bool) {
@@ -30,7 +49,7 @@ pub fn process_dir(path: &Path, lowercase: bool) {
                 continue;
             }
 
-            if let Err(e) = fs::rename(original_path, &new_path) {
+            if let Err(e) = safe_rename(original_path, &new_path) {
                 eprintln!("Failed to rename {}: {}", name, e);
             } else {
                 println!("Renamed: {} → {}", name, slug);
