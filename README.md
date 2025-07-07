@@ -7,6 +7,12 @@
 
 Available on [crates.io](https://crates.io/crates/pathcify).
 
+For examples:
+
+- `La Quête d'Ewilan vol.1 : D'un monde à l'autre-·/_,:; (1), [Bottero, Pierre]`Author` @{1} <book> ?!//&` to `la.quete.dewilan.vol.1.dun.monde.a.lautre-._.1.bottero.pierre.author.{1}.book` with lowercase
+- `00 - Préface` to `00-Preface`
+- `Góðan daginn` to `Godan.Daginn`
+
 ## Requirements
 
 - [Rust](https://www.rust-lang.org/)
@@ -21,39 +27,28 @@ cargo install pathcify
 
 ## Usage
 
-You have to pass the path to the `.m4b` file you want to extract chapters from.
+You can execute `pathcify` on a directory or a file:
 
 ```bash
-m4b-extractor /path/to/input.m4b
+pathcify /path/to/dir
 ```
 
-You will get a directory named `<input_file>_chapters` containing:
+All files and directories will be recursively pathcified, converting their names to a format suitable for URLs or filenames.
 
-- Each chapter as a separate `.mp3` file.
-- A `metadata.json` file with the metadata of the book.
-- A `tags.yaml` file with the tags of the book.
-- A `folder.jpg` file with the cover of the book.
-
-```plain
-1_Chapter 01.mp3
-2_Chapter 02.mp3
-3_Chapter 03.mp3
-# ...
-folder.jpg
-metadata.json
-tags.yaml
-```
+- Remove all special characters
+- Replace all spaces with a dot
+- Remove all dots at the beginning and the end of the string
+- Replace all dots that are repeated more than once with a single dot
+- Keep `-` and `_` characters (and remove spaces before and after them)
+- Full lowercase with option `-l`
 
 ### Options
 
 ```bash
-m4b-extractor --help
+pathcify --help
 ```
 
-- `-o`, `--output <OUTPUT>`: Specify the output directory for extracted chapters (default: `<input_file>_chapters`).
-- `-k`, `--keep`: Keep the original `.m4b` files without converting them to `.mp3`.
-- `-q`, `--quality <QUALITY>`: Specify the conversion quality (1=best, 9=worst) for `.mp3` files (default: `2`).
-- `-s`, `--sanitize`: Sanitize filenames by replacing invalid characters with underscores (default: `false`).
+- `-l`, `--lowercase`: Convert all names to lowercase.
 - `-h`, `--help`: Print help information.
 - `-V`, `--version`: Print the version of the tool.
 
@@ -84,5 +79,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 [rust-version-src]: https://img.shields.io/badge/Rust-v1.88.0-000000?colorA=18181B&logo=Rust&logoColor=ffffff
 [rust-version-href]: https://www.rust-lang.org/
-[tests-src]: https://img.shields.io/github/actions/workflow/status/ewilan-riviere/m4b-extractor/run-tests.yml?branch=main&label=tests&style=flat&colorA=18181B
-[tests-href]: https://github.com/ewilan-riviere/m4b-extractor/actions
+[tests-src]: https://img.shields.io/github/actions/workflow/status/ewilan-riviere/pathcify/run-tests.yml?branch=main&label=tests&style=flat&colorA=18181B
+[tests-href]: https://github.com/ewilan-riviere/pathcify/actions

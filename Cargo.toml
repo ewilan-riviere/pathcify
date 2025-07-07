@@ -4,8 +4,8 @@ version = "0.0.1"
 edition = "2021"
 license = "MIT"
 description = "CLI tool to recursively slugify file and directory names using dots, removing special characters and normalizing names."
-homepage = "https://github.com/ewilan-riviere/m4b-extractor"
-repository = "https://github.com/ewilan-riviere/m4b-extractor"
+homepage = "https://github.com/ewilan-riviere/pathcify"
+repository = "https://github.com/ewilan-riviere/pathcify"
 readme = "README.md"
 keywords = ["filesystem"]
 
