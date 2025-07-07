@@ -45,14 +45,12 @@ pub fn process_dir(path: &Path, lowercase: bool) {
         if let Some(name) = original_path.file_name().and_then(|n| n.to_str()) {
             // ✅ Skip certain filenames
             if SKIP_FILENAMES.contains(&name) {
+                println!("Skipping special file: {}", name);
                 continue;
             }
 
-            // ✅ Compute the slug
-            let slug = slugify(name, false);
-
-            // ✅ Apply lowercase if needed
-            let new_name = if lowercase { slug.to_lowercase() } else { slug };
+            let slug = slugify(name, lowercase);
+            let new_name = slug;
 
             // ✅ Skip if unchanged
             if new_name == name {
@@ -69,8 +67,11 @@ pub fn process_dir(path: &Path, lowercase: bool) {
             }
 
             // ✅ Perform rename
-            safe_rename(&original_path, &new_path).unwrap();
-            println!("Renamed: {} → {}", name, new_name);
+            if let Err(e) = safe_rename(&original_path, &new_path) {
+                eprintln!("Failed to rename {} → {}: {}", name, new_name, e);
+            } else {
+                println!("Renamed: {} → {}", name, new_name);
+            }
         }
     }
 }
