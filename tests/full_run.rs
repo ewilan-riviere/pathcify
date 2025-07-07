@@ -75,6 +75,13 @@ fn test_full_run_original_case() {
         .join("Im.your.father")
         .exists());
     assert!(output_path.join("ThisIsalooping.md").exists());
+
+    // ✅ Check that .DS_Store still exists and was skipped
+    let ds_store = output_path.join("Spaced.Repository").join(".DS_Store");
+    assert!(
+        ds_store.exists(),
+        ".DS_Store in Spaced Repository should not be renamed or deleted"
+    );
 }
 
 #[test]

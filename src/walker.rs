@@ -4,6 +4,14 @@ use std::fs;
 use std::path::Path;
 use walkdir::WalkDir;
 
+const SKIP_FILENAMES: &[&str] = &[
+    ".DS_Store",
+    "desktop.ini",
+    "Thumbs.db",
+    "__MACOSX",
+    ".AppleDouble",
+];
+
 fn safe_rename(src: &Path, dst: &Path) -> std::io::Result<()> {
     if src.exists() && dst.exists() {
         // Compare file names case-insensitively
@@ -38,6 +46,10 @@ pub fn process_dir(path: &Path, lowercase: bool) {
             let slug = slugify(name, lowercase);
 
             if slug == name {
+                continue;
+            }
+
+            if SKIP_FILENAMES.contains(&name) {
                 continue;
             }
 
