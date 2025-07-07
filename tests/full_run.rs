@@ -1,6 +1,32 @@
 use std::fs::{self, File};
+use std::path::Path;
 use std::path::PathBuf;
 use std::process::Command;
+
+fn print_tree(path: &Path, prefix: &str) {
+    if let Ok(entries) = fs::read_dir(path) {
+        let entries = entries.filter_map(Result::ok).collect::<Vec<_>>();
+        for (i, entry) in entries.iter().enumerate() {
+            let path = entry.path();
+            let is_last = i == entries.len() - 1;
+            let name = path.file_name().unwrap().to_string_lossy();
+
+            // Print the prefix + branch or corner
+            println!(
+                "{}{}{}",
+                prefix,
+                if is_last { "└── " } else { "├── " },
+                name
+            );
+
+            // If directory, recurse with updated prefix
+            if path.is_dir() {
+                let new_prefix = format!("{}{}", prefix, if is_last { "    " } else { "│   " });
+                print_tree(&path, &new_prefix);
+            }
+        }
+    }
+}
 
 /// Prepare clean test directory, deleting it first if exists
 fn prepare_test_dir(name: &str) -> PathBuf {
@@ -51,6 +77,9 @@ fn test_full_run_original_case() {
     assert!(output_dir.join("Spaced.Repository").exists());
     assert!(output_dir.join("@").join("HelloIceland").exists());
     assert!(output_dir.join("ThisIsalooping.md").exists());
+
+    println!("Directory structure after pathcify:");
+    print_tree(output_dir.as_path(), "");
 
     // Check .DS_Store is untouched
     assert!(output_dir
