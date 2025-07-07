@@ -33,6 +33,12 @@ fn test_skips_ds_store_file() {
     File::create(&hidden_file).unwrap();
     File::create(&visible_file).unwrap();
 
+    // Ensure .DS_Store exists before running (especially for CI)
+    assert!(
+        hidden_file.exists(),
+        ".DS_Store should exist before running"
+    );
+
     // Run
     run_pathcify(&path);
 
