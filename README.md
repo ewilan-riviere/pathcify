@@ -1,23 +1,22 @@
-# dotify
+# pathcify
 
 [![rust][rust-version-src]][rust-version-href]
 [![tests][tests-src]][tests-href]
 
 [Rust](https://www.rust-lang.org/) CLI tool to recursively slugify file and directory names using dots, removing special characters and normalizing names.
 
-Available on [crates.io](https://crates.io/crates/m4b-extractor).
+Available on [crates.io](https://crates.io/crates/pathcify).
 
 ## Requirements
 
 - [Rust](https://www.rust-lang.org/)
-- [FFmpeg](https://ffmpeg.org/) installed and available in your `PATH`
 
 ## Installation
 
-You can install `m4b-extractor` with [Cargo](https://doc.rust-lang.org/cargo/).
+You can install `pathcify` with [Cargo](https://doc.rust-lang.org/cargo/).
 
 ```bash
-cargo install m4b-extractor
+cargo install pathcify
 ```
 
 ## Usage

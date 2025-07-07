@@ -39,9 +39,9 @@ fn test_full_run_original_case() {
         .args(["run", "--quiet", "--"])
         .arg(&output_path)
         .status()
-        .expect("Failed to run dotify without lowercase");
+        .expect("Failed to run pathcify without lowercase");
 
-    assert!(status.success(), "dotify failed without --lowercase");
+    assert!(status.success(), "pathcify failed without --lowercase");
 
     assert!(output_path
         .join("@")
@@ -78,9 +78,9 @@ fn test_full_run_lowercase() {
         .arg("--lowercase")
         .arg(&output_path)
         .status()
-        .expect("Failed to run dotify with lowercase");
+        .expect("Failed to run pathcify with lowercase");
 
-    assert!(status.success(), "dotify failed with --lowercase");
+    assert!(status.success(), "pathcify failed with --lowercase");
 
     assert!(output_path
         .join("@")
@@ -132,13 +132,13 @@ fn test_slugify_conflict() {
     let mut conflict_file = fs::File::create(&conflict_file_path).unwrap();
     writeln!(conflict_file, "New conflicting file content").unwrap();
 
-    // Run dotify
+    // Run pathcify with --lowercase
     let status = Command::new("cargo")
         .args(["run", "--quiet", "--"])
         .arg("--lowercase")
         .arg(&output_path)
         .status()
-        .expect("Failed to run dotify");
+        .expect("Failed to run pathcify");
 
     assert!(status.success());
 

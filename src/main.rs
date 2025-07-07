@@ -1,6 +1,6 @@
 use clap::Parser;
-use dotify::cli::Cli;
-use dotify::walker::process_dir;
+use pathcify::cli::Cli;
+use pathcify::walker::process_dir;
 
 fn main() {
     let cli = Cli::parse();
