@@ -8,15 +8,9 @@ on:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 5
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest]
-        stability: [prefer-stable]
-
-    name: ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    env:
+      RUST_BACKTRACE: 1
 
     steps:
       - name: Checkout code
