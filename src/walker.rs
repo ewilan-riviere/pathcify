@@ -43,29 +43,34 @@ pub fn process_dir(path: &Path, lowercase: bool) {
         let original_path = entry.path();
 
         if let Some(name) = original_path.file_name().and_then(|n| n.to_str()) {
-            let slug = slugify(name, lowercase);
-
-            if slug == name {
-                continue;
-            }
-
+            // ✅ Skip certain filenames
             if SKIP_FILENAMES.contains(&name) {
                 continue;
             }
 
-            let parent = original_path.parent().unwrap();
-            let new_path = parent.join(&slug);
+            // ✅ Compute the slug
+            let slug = slugify(name, false);
 
-            if new_path.exists() {
-                eprintln!("Skipping: {} → {} (already exists)", name, slug);
+            // ✅ Apply lowercase if needed
+            let new_name = if lowercase { slug.to_lowercase() } else { slug };
+
+            // ✅ Skip if unchanged
+            if new_name == name {
                 continue;
             }
 
-            if let Err(e) = safe_rename(original_path, &new_path) {
-                eprintln!("Failed to rename {}: {}", name, e);
-            } else {
-                println!("Renamed: {} → {}", name, slug);
+            // ✅ Compute target path
+            let new_path = original_path.with_file_name(&new_name);
+
+            // ✅ Skip if target already exists
+            if new_path.exists() {
+                println!("Skipping: {} → {} (already exists)", name, new_name);
+                continue;
             }
+
+            // ✅ Perform rename
+            safe_rename(&original_path, &new_path).unwrap();
+            println!("Renamed: {} → {}", name, new_name);
         }
     }
 }
