@@ -1,4 +1,5 @@
 /target
 /tests/output
+/tests/output_conflict
 /tests/output_lowercase
 .DS_Store

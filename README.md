@@ -57,8 +57,8 @@ pathcify --help
 Build and test the package:
 
 ```bash
-cargo test
 cargo build --release
+cargo test
 ```
 
 Test publishing:
