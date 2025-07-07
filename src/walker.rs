@@ -31,7 +31,7 @@ fn safe_rename(src: &Path, dst: &Path) -> std::io::Result<()> {
 }
 
 /// Recursively rename files and directories in place using slugify rules
-pub fn process_dir(path: &Path, lowercase: bool) {
+pub fn process_dir(path: &Path, lowercase: bool, verbose: bool) {
     for entry in WalkDir::new(path)
         .min_depth(1)
         .into_iter()
@@ -45,7 +45,9 @@ pub fn process_dir(path: &Path, lowercase: bool) {
         if let Some(name) = original_path.file_name().and_then(|n| n.to_str()) {
             // ✅ Skip certain filenames
             if SKIP_FILENAMES.contains(&name) {
-                println!("Skipping special file: {}", name);
+                if verbose {
+                    println!("Skipping special file: {}", name);
+                }
                 continue;
             }
 
@@ -62,15 +64,21 @@ pub fn process_dir(path: &Path, lowercase: bool) {
 
             // ✅ Skip if target already exists
             if new_path.exists() {
-                println!("Skipping: {} → {} (already exists)", name, new_name);
+                if verbose {
+                    println!("Skipping: {} → {} (already exists)", name, new_name);
+                }
                 continue;
             }
 
             // ✅ Perform rename
             if let Err(e) = safe_rename(&original_path, &new_path) {
-                eprintln!("Failed to rename {} → {}: {}", name, new_name, e);
+                if verbose {
+                    eprintln!("Failed to rename {} → {}: {}", name, new_name, e);
+                }
             } else {
-                println!("Renamed: {} → {}", name, new_name);
+                if verbose {
+                    println!("Renamed: {} → {}", name, new_name);
+                }
             }
         }
     }

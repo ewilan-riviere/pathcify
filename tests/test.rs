@@ -28,7 +28,7 @@ fn test_recursive_renaming() {
     File::create(&file_path).unwrap();
 
     // Run renaming
-    pathcify::walker::process_dir(&temp.path(), true);
+    pathcify::walker::process_dir(&temp.path(), true, true);
 
     let renamed_root = temp.path().join("test.dir");
     let renamed_subdir = renamed_root.join("godan.daginn");
