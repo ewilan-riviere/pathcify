@@ -35,6 +35,10 @@ fn prepare_test_dir(name: &str) -> PathBuf {
         fs::remove_dir_all(&base).unwrap();
     }
     fs::create_dir_all(&base).unwrap();
+    // Create a .DS_Store file in `tests/data/Spaced Repository` to simulate macOS behavior
+    let ds_store_path = base.join("Spaced.Repository").join(".DS_Store");
+    fs::create_dir_all(ds_store_path.parent().unwrap()).unwrap();
+    File::create(ds_store_path).unwrap();
     base
 }
 
