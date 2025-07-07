@@ -72,7 +72,7 @@ fn test_full_run_original_case() {
     assert!(output_path
         .join("Spaced.Repository")
         .join("Noooooooh")
-        .join("Im.Your.Father")
+        .join("Im.your.father")
         .exists());
     assert!(output_path.join("ThisIsalooping.md").exists());
 }
