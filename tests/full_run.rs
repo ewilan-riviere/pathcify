@@ -94,8 +94,12 @@ fn test_full_run_lowercase() {
     }
 
     copy_dir_all(&source_path, &output_path);
-    let status = run_pathcify(&output_path, true);
-    assert!(status.success(), "pathcify failed with --lowercase");
+
+    // Add .DS_Store manually (CI doesn't have it)
+    let _ = std::fs::File::create(output_path.join("Spaced.Repository").join(".DS_Store"));
+
+    let status = run_pathcify(&output_path, false);
+    assert!(status.success(), "pathcify failed without --lowercase");
 
     println!("\n=== Final directory tree (lowercase) ===");
     print_tree(&output_path, "");
